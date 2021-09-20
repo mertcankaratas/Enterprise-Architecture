@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspectsAutofac.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -24,6 +25,7 @@ namespace Business.Concrete
             _categoryService = categoryService;
         }
 
+        [SecuredOperation("product.admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {   //business codes
@@ -49,7 +51,7 @@ namespace Business.Concrete
             //yetksi varmı ?
             if (DateTime.Now.Hour == 1)
             {
-                return new ErrrorDataResult<List<Product>>(Messages.MaintenanceTime);
+                return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
             return new SuccessDataResult<List<Product>>(_ProductDal.GetAll(), Messages.ProductsListed);
 
